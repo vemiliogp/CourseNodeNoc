@@ -13,11 +13,14 @@ export class FileSystemDataSource implements LogDataSource {
   }
 
   private createLogsFile = () => {
-    if (!fs.existsSync(this.logPath)) fs.mkdirSync(this.logPath);
+    if (!fs.existsSync(this.logPath)) {
+      fs.mkdirSync(this.logPath);
+    }
 
     [this.allLogsPath, this.mediumLogsPath, this.highLogsPath].forEach(
       (path) => {
         if (fs.existsSync(path)) return;
+
         fs.writeFileSync(path, "");
       }
     );
@@ -38,12 +41,12 @@ export class FileSystemDataSource implements LogDataSource {
   }
 
   private getLogsFromFile = (path: string): LogEntity[] => {
-    const content = fs.readFileSync(path, { encoding: "utf-8" });
+    const content = fs.readFileSync(path, "utf-8");
     if (content === "") return [];
 
     const logs = content.split("\n").map(LogEntity.fromJson);
     return logs;
-  };
+  }; 
 
   async getLogs(severityLevel: LogSeverityLevel): Promise<LogEntity[]> {
     switch (severityLevel) {

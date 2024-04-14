@@ -9,9 +9,8 @@ import { EmailService } from "./email/email.service";
 
 const fsLogRepository = new LogRepositoryImpl(new FileSystemDataSource());
 const mongoLogRepository = new LogRepositoryImpl(new MongoLogDataSource());
-const postgresLogRepository = new LogRepositoryImpl(
-  new PostgresLogDataSource()
-);
+const postgresLogRepository = new LogRepositoryImpl(new PostgresLogDataSource());
+
 const emailService = new EmailService();
 
 export class Server {
@@ -23,13 +22,13 @@ export class Server {
     //   "aynat.rondon@gmail.com",
     // ]);
 
-    // CronService.createJob("*/5 * * * * *", () => {
-    //   const url = "https://google.com";
-    //   new CheckServiceMultiple(
-    //     [fsLogRepository, mongoLogRepository, postgresLogRepository],
-    //     () => console.log(`${url} is ok`),
-    //     (error) => console.error(error)
-    //   ).execute(url);
-    // });
+    CronService.createJob("*/5 * * * * *", () => {
+      const url = "https://google.com";
+      new CheckServiceMultiple(
+        [fsLogRepository, mongoLogRepository, postgresLogRepository],
+        () => console.log(`${url} is ok`),
+        (error) => console.error(error)
+      ).execute(url);
+    });
   }
 }
